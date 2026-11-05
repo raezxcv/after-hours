@@ -107,15 +107,6 @@ export const AudioPlayerDock: React.FC = () => {
     audioEngine.seek(val);
   };
 
-  const handleScrubberClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!scrubberContainerRef.current) return;
-    const rect = scrubberContainerRef.current.getBoundingClientRect();
-    const offsetX = Math.max(0, Math.min(e.clientX - rect.left, rect.width));
-    const percent = offsetX / rect.width;
-    const duration = playerState.duration || currentTrack.duration;
-    audioEngine.seek(percent * duration);
-  };
-
   const currentTrack = playerState.currentTrack;
   const currentDuration = playerState.duration || currentTrack.duration;
   const progressPercent = currentDuration > 0
@@ -131,7 +122,7 @@ export const AudioPlayerDock: React.FC = () => {
       <aside
         data-dock="true"
         aria-label="AFTERHOURS Demo Audio Player"
-        className="fixed bottom-0 left-0 right-0 z-40 bg-punk-black border-t-2 border-crimson shadow-[0_-10px_30px_rgba(0,0,0,0.8)]"
+        className="fixed bottom-0 left-0 right-0 z-50 bg-punk-black border-t-2 border-crimson shadow-[0_-10px_30px_rgba(0,0,0,0.8)]"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-2.5">
           <div className="flex flex-col md:flex-row items-center justify-between gap-3">
@@ -203,7 +194,6 @@ export const AudioPlayerDock: React.FC = () => {
               {/* Scrubber Rail */}
               <div
                 ref={scrubberContainerRef}
-                onClick={handleScrubberClick}
                 className="relative flex-1 h-6 flex items-center cursor-pointer group select-none"
                 title="Click or drag to seek"
               >
@@ -375,7 +365,7 @@ export const AudioPlayerDock: React.FC = () => {
 
       {/* Handwritten Lyrics Sheet Modal */}
       {showLyricsModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-sm">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/85 backdrop-blur-sm">
           <div className="relative w-full max-w-lg bg-paper-cream text-punk-black p-6 sm:p-8 border-4 border-punk-black shadow-2xl tape-top-left">
             <button
               onClick={() => setShowLyricsModal(false)}

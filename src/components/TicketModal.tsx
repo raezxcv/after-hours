@@ -27,7 +27,7 @@ export const TicketModal: React.FC<TicketModalProps> = ({ gig, onClose }) => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-sm animate-fadeIn">
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/85 backdrop-blur-sm animate-fadeIn">
       <div className="relative w-full max-w-lg bg-punk-black text-dirty-white border-2 border-crimson shadow-2xl p-6 sm:p-8 tape-top-left">
         {/* Close button */}
         <button

@@ -48,12 +48,12 @@ export const LightboxModal: React.FC<LightboxModalProps> = ({
       role="dialog"
       aria-modal="true"
       aria-label="Image Lightbox Viewer"
-      className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-6 bg-black/92 backdrop-blur-md animate-fadeIn"
+      className="fixed inset-0 z-[100] flex items-center justify-center p-2 sm:p-6 bg-black/92 backdrop-blur-md animate-fadeIn"
     >
       {/* Close button */}
       <button
         onClick={onClose}
-        className="absolute top-4 right-4 z-50 p-2 bg-punk-black border border-punk-border text-dirty-white hover:text-crimson transition-colors"
+        className="absolute top-4 right-4 z-[100] p-2 bg-punk-black border border-punk-border text-dirty-white hover:text-crimson transition-colors"
         aria-label="Close Lightbox"
       >
         <X className="w-6 h-6" />

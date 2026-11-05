@@ -689,11 +689,17 @@ export interface AudioEngineState {
   volume: number;
 }
 
+export function resolveAudioUrl(src: string): string {
+  if (!src) return '';
+  if (src.startsWith('http://') || src.startsWith('https://')) return src;
+  const cleanSrc = src.replace(/^\.?\//, '');
+  const base = (import.meta as unknown as { env?: { BASE_URL?: string } }).env?.BASE_URL || './';
+  const cleanBase = base.endsWith('/') ? base : `${base}/`;
+  return `${cleanBase}${cleanSrc}`;
+}
+
 class RockAudioEngine {
   private audio: HTMLAudioElement | null = null;
-  private ctx: AudioContext | null = null;
-  private analyser: AnalyserNode | null = null;
-  private sourceNode: MediaElementAudioSourceNode | null = null;
   private isPlaying: boolean = false;
   private currentTrack: Track = TRACKS[0];
   private playbackTime: number = 0;
@@ -702,24 +708,27 @@ class RockAudioEngine {
   private volume: number = 0.85;
   private listeners: Set<() => void> = new Set();
   private isAudioInitialized: boolean = false;
+  private pendingPlayPromise: Promise<void> | null = null;
 
   constructor() {
-    // Lazy initialized on first user interaction in browser
+    // Audio element is initialized on demand upon user interaction
   }
 
-  private initAudio() {
-    if (this.isAudioInitialized && this.audio) return;
+  private initAudio(): HTMLAudioElement {
+    if (this.audio && this.isAudioInitialized) {
+      return this.audio;
+    }
 
     try {
       this.audio = new Audio();
-      this.audio.preload = 'metadata';
+      this.audio.preload = 'auto';
       this.audio.volume = this.volume;
-      this.audio.src = this.currentTrack.audioSrc;
+      this.audio.src = resolveAudioUrl(this.currentTrack.audioSrc);
 
       this.audio.addEventListener('timeupdate', () => {
         if (this.audio) {
           this.playbackTime = this.audio.currentTime;
-          if (this.audio.duration && !isNaN(this.audio.duration)) {
+          if (this.audio.duration && !isNaN(this.audio.duration) && isFinite(this.audio.duration)) {
             this.duration = this.audio.duration;
           }
           if (this.audio.buffered && this.audio.buffered.length > 0) {
@@ -737,7 +746,7 @@ class RockAudioEngine {
       });
 
       this.audio.addEventListener('durationchange', () => {
-        if (this.audio && this.audio.duration && !isNaN(this.audio.duration)) {
+        if (this.audio && this.audio.duration && !isNaN(this.audio.duration) && isFinite(this.audio.duration)) {
           this.duration = this.audio.duration;
           this.notify();
         }
@@ -762,127 +771,119 @@ class RockAudioEngine {
       });
 
       this.isAudioInitialized = true;
+      return this.audio;
     } catch (err) {
       console.error('Failed to initialize audio element:', err);
+      throw err;
     }
   }
 
-  private initWebAudio() {
-    if (this.ctx || !this.audio) return;
+  public async play(track?: Track): Promise<void> {
+    const audio = this.initAudio();
 
-    try {
-      const AudioCtx = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
-      if (!AudioCtx) return;
-
-      this.ctx = new AudioCtx();
-      this.analyser = this.ctx.createAnalyser();
-      this.analyser.fftSize = 64;
-      this.analyser.smoothingTimeConstant = 0.8;
-
-      try {
-        this.sourceNode = this.ctx.createMediaElementSource(this.audio);
-        this.sourceNode.connect(this.analyser);
-        this.analyser.connect(this.ctx.destination);
-      } catch (nodeErr) {
-        console.warn('Web Audio source connection note:', nodeErr);
-      }
-    } catch (e) {
-      console.warn('Web Audio Context note:', e);
-    }
-  }
-
-  public play(track?: Track) {
-    this.initAudio();
-
-    if (this.ctx && this.ctx.state === 'suspended') {
-      this.ctx.resume();
-    }
-
+    // If switching to a different track
     if (track && track.id !== this.currentTrack.id) {
       this.currentTrack = track;
       this.playbackTime = 0;
       this.duration = track.duration;
       this.bufferedTime = 0;
-      if (this.audio) {
-        this.audio.src = track.audioSrc;
-        this.audio.currentTime = 0;
+
+      // Wait for any pending play to settle before reassigning source
+      if (this.pendingPlayPromise) {
+        try {
+          await this.pendingPlayPromise;
+        } catch {
+          // Ignore aborted promises
+        }
       }
+
+      audio.pause();
+      audio.src = resolveAudioUrl(track.audioSrc);
+      audio.currentTime = 0;
+      audio.load();
     }
 
-    if (this.audio) {
-      const playPromise = this.audio.play();
-      if (playPromise !== undefined) {
-        playPromise
-          .then(() => {
-            this.isPlaying = true;
-            this.initWebAudio();
-            this.notify();
-          })
-          .catch((err) => {
-            console.warn('Audio playback note:', err);
-            this.isPlaying = false;
-            this.notify();
-          });
+    try {
+      this.pendingPlayPromise = audio.play();
+      await this.pendingPlayPromise;
+      this.isPlaying = true;
+      this.notify();
+    } catch (err: any) {
+      if (err?.name !== 'AbortError') {
+        console.warn('Audio playback note:', err);
       }
+      this.isPlaying = !audio.paused;
+      this.notify();
+    } finally {
+      this.pendingPlayPromise = null;
     }
   }
 
-  public pause() {
-    if (this.audio) {
-      this.audio.pause();
+  public async pause(): Promise<void> {
+    if (!this.audio) return;
+    if (this.pendingPlayPromise) {
+      try {
+        await this.pendingPlayPromise;
+      } catch {
+        // Ignore aborted promises
+      }
     }
+    this.audio.pause();
     this.isPlaying = false;
     this.notify();
   }
 
-  public togglePlay(track?: Track) {
-    this.initAudio();
+  public async togglePlay(track?: Track): Promise<void> {
+    const audio = this.initAudio();
 
+    // If a different track is clicked, switch and play it
     if (track && track.id !== this.currentTrack.id) {
-      this.play(track);
+      await this.play(track);
       return;
     }
 
-    if (this.isPlaying) {
-      this.pause();
+    // Toggle current track
+    if (this.isPlaying || (!audio.paused && audio.currentTime > 0)) {
+      await this.pause();
     } else {
-      this.play();
+      await this.play();
     }
   }
 
-  public seek(seconds: number) {
-    this.initAudio();
+  public seek(seconds: number): void {
+    const audio = this.initAudio();
     const targetDuration = this.duration || this.currentTrack.duration;
     const clamped = Math.max(0, Math.min(seconds, targetDuration));
     this.playbackTime = clamped;
-    if (this.audio) {
-      this.audio.currentTime = clamped;
+    try {
+      audio.currentTime = clamped;
+    } catch (e) {
+      console.warn('Seek error:', e);
     }
     this.notify();
   }
 
-  public setVolume(val: number) {
+  public setVolume(val: number): void {
+    const audio = this.initAudio();
     this.volume = Math.max(0, Math.min(1, val));
-    if (this.audio) {
-      this.audio.volume = this.volume;
-    }
+    audio.volume = this.volume;
     this.notify();
   }
 
-  public nextTrack() {
+  public async nextTrack(): Promise<void> {
     const currentIndex = TRACKS.findIndex((t) => t.id === this.currentTrack.id);
     const nextIndex = (currentIndex + 1) % TRACKS.length;
-    this.play(TRACKS[nextIndex]);
+    await this.play(TRACKS[nextIndex]);
   }
 
-  public prevTrack() {
+  public async prevTrack(): Promise<void> {
     const currentIndex = TRACKS.findIndex((t) => t.id === this.currentTrack.id);
     const prevIndex = (currentIndex - 1 + TRACKS.length) % TRACKS.length;
-    this.play(TRACKS[prevIndex]);
+    await this.play(TRACKS[prevIndex]);
   }
 
-  public selectTrack(track: Track) {
-    this.play(track);
+  public async selectTrack(track: Track): Promise<void> {
+    await this.play(track);
   }
 
   public getState(): AudioEngineState {
@@ -897,21 +898,39 @@ class RockAudioEngine {
   }
 
   public getVisualizerData(dataArray: Uint8Array): void {
-    if (this.analyser && this.isPlaying) {
-      this.analyser.getByteFrequencyData(dataArray as any);
-    } else {
-      dataArray.fill(0);
+    if (!this.isPlaying) {
+      // Gentle decaying baseline when paused
+      for (let i = 0; i < dataArray.length; i++) {
+        dataArray[i] = Math.max(0, dataArray[i] * 0.85);
+      }
+      return;
+    }
+
+    // Procedural energetic rock spectrum (heavy bass 0-4, punchy mids 5-11, sizzling highs 12-15)
+    const t = Date.now() / 120;
+    const bpm = this.currentTrack.bpm || 160;
+    const beat = (Date.now() / (60000 / bpm)) * Math.PI * 2;
+
+    for (let i = 0; i < dataArray.length; i++) {
+      const freqFactor = (16 - i) / 16;
+      const kickPulse = Math.pow(Math.max(0, Math.sin(beat)), 4) * 220 * (i < 4 ? 1.0 : 0.4);
+      const snareSnap = Math.pow(Math.max(0, Math.sin(beat + Math.PI)), 6) * 190 * (i >= 3 && i <= 8 ? 1.0 : 0.3);
+      const guitarRiff = (Math.sin(t * 1.8 + i * 0.7) * 0.5 + 0.5) * 140 * freqFactor;
+      const hihatHiss = (Math.random() * 80 + 40) * (i >= 10 ? 1.0 : 0.2);
+
+      const combined = Math.min(255, Math.max(15, kickPulse + snareSnap + guitarRiff + hihatHiss));
+      dataArray[i] = Math.floor(combined);
     }
   }
 
-  public subscribe(listener: () => void) {
+  public subscribe(listener: () => void): () => void {
     this.listeners.add(listener);
     return () => {
       this.listeners.delete(listener);
     };
   }
 
-  private notify() {
+  private notify(): void {
     this.listeners.forEach((cb) => cb());
   }
 }
