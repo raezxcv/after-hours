@@ -1,0 +1,147 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --bg-ground: #0a0a0d;
+    --text-primary: #ede8df;
+    --accent-crimson: #e01e2b;
+    --border-punk: #272732;
+  }
+
+  body {
+    background-color: #0a0a0d;
+    color: #ede8df;
+    font-family: 'Space Mono', monospace;
+    overflow-x: hidden;
+  }
+
+  ::selection {
+    background-color: #e01e2b;
+    color: #ffffff;
+  }
+
+  :focus-visible {
+    outline: 2px solid #e01e2b;
+    outline-offset: 3px;
+  }
+}
+
+/* Photocopied Zine & Rock Aesthetics */
+.tape-top-left {
+  position: relative;
+}
+.tape-top-left::before {
+  content: '';
+  position: absolute;
+  top: -10px;
+  left: 20px;
+  width: 60px;
+  height: 20px;
+  background-color: #d8cca8;
+  opacity: 0.9;
+  transform: rotate(-3deg);
+  z-index: 20;
+  pointer-events: none;
+}
+
+.tape-top-right {
+  position: relative;
+}
+.tape-top-right::after {
+  content: '';
+  position: absolute;
+  top: -10px;
+  right: 20px;
+  width: 60px;
+  height: 20px;
+  background-color: #c8a876;
+  opacity: 0.9;
+  transform: rotate(4deg);
+  z-index: 20;
+  pointer-events: none;
+}
+
+/* Marquee infinite scroll */
+@keyframes marquee {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-marquee {
+  display: flex;
+  width: 200%;
+  animation: marquee 28s linear infinite;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee {
+    animation: none;
+    transform: none;
+  }
+}
+
+/* Vinyl Spin Animation */
+@keyframes spinSlow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.animate-spin-slow {
+  animation: spinSlow 16s linear infinite;
+}
+
+/* Distressed button stamp effect - Flat and honest */
+.btn-punk {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Anton', sans-serif;
+  letter-spacing: 0.05em;
+  font-size: 1.15rem;
+  padding: 0.7rem 1.75rem;
+  background-color: #e01e2b;
+  color: #ffffff;
+  border: 2px solid #e01e2b;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.btn-punk:hover {
+  background-color: #ff3342;
+  border-color: #ff3342;
+}
+
+.btn-punk:active {
+  background-color: #8e0c15;
+  border-color: #8e0c15;
+}
+
+.btn-punk-outline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Anton', sans-serif;
+  letter-spacing: 0.05em;
+  font-size: 1.15rem;
+  padding: 0.7rem 1.75rem;
+  background-color: transparent;
+  color: #ede8df;
+  border: 2px solid #ede8df;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.btn-punk-outline:hover {
+  border-color: #e01e2b;
+  color: #ffffff;
+  background-color: #e01e2b;
+}
+
+.btn-punk-outline:active {
+  background-color: #8e0c15;
+  border-color: #8e0c15;
+}
