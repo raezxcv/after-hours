@@ -159,16 +159,16 @@ export const DISCOGRAPHY: Release[] = [
     coverImage: 'images/album-static-dreams.jpg',
     description: 'The monumental debut full-length album from AFTERHOURS. Recorded entirely live onto 2-inch tape at Old Chapel Studios in Leeds across ten freezing days in January. An urgent, cathartic record exploring modern disconnection, late-night transit, fleeting intimacy, and youthful defiance.',
     tracks: [
-      { number: 1, title: 'After Hours', duration: '3:40', hasDemoAudio: true, audioTrackId: 'after-hours', lyricsSnippet: "I said I wouldn't be back here again / Team no sleep, after hours athlete" },
-      { number: 2, title: 'The Paradox', duration: '4:04', hasDemoAudio: true, audioTrackId: 'the-paradox', lyricsSnippet: "You are resilient like a distant star / You are brilliant glowing in the growing dark" },
-      { number: 3, title: 'Face in the Crowd', duration: '7:27', hasDemoAudio: true, audioTrackId: 'face-in-the-crowd', lyricsSnippet: "Tell my friends I'm much too proud to take you back again and be another face in the crowd" },
-      { number: 4, title: 'Bleach & Leather', duration: '3:15', hasDemoAudio: false, lyricsSnippet: 'Smell of cigarettes in a thrift store coat / Every word you never spoke still caught in your throat' },
-      { number: 5, title: 'The Last Bus to Nowhere', duration: '3:42', hasDemoAudio: false, lyricsSnippet: 'Empty seats on the upper deck / Rain tracing down the collar of my neck' },
-      { number: 6, title: 'Broken Neon Sign', duration: '2:56', hasDemoAudio: false, lyricsSnippet: 'Letters buzzing in the dark / Leave a scar and make a mark' },
-      { number: 7, title: 'Headlights in the Rearview', duration: '3:30', hasDemoAudio: false, lyricsSnippet: 'Two yellow beams keeping pace / Running away from this hollow place' },
-      { number: 8, title: 'Overdrive Heart', duration: '2:38', hasDemoAudio: false, lyricsSnippet: 'Amp on ten and the needle in the red / Rather be bleeding than living half dead' },
-      { number: 9, title: 'Concrete Garden', duration: '4:12', hasDemoAudio: false, lyricsSnippet: 'Weeds pushing through the cracks in the street / The city hum underneath our feet' },
-      { number: 10, title: 'Emergency Broadcast', duration: '3:01', hasDemoAudio: false, lyricsSnippet: 'Sirens wailing down the ring road west / Put your tired head against my chest' }
+      { number: 1, title: 'Eye of a Hurricane', duration: '4:09', hasDemoAudio: true, audioTrackId: 'eye-of-a-hurricane', lyricsSnippet: "Storm clouds are rising in my chest / Standing right here in the eye of a hurricane" },
+      { number: 2, title: 'After Hours', duration: '3:40', hasDemoAudio: true, audioTrackId: 'after-hours', lyricsSnippet: "I said I wouldn't be back here again / Team no sleep, after hours athlete" },
+      { number: 3, title: 'The Paradox', duration: '4:04', hasDemoAudio: true, audioTrackId: 'the-paradox', lyricsSnippet: "You are resilient like a distant star / You are brilliant glowing in the growing dark" },
+      { number: 4, title: 'The Hook', duration: '4:50', hasDemoAudio: true, audioTrackId: 'the-hook', lyricsSnippet: "How did we ever get so far? / How did you ever put your hook into my heart?" },
+      { number: 5, title: 'Face in the Crowd', duration: '7:27', hasDemoAudio: true, audioTrackId: 'face-in-the-crowd', lyricsSnippet: "Tell my friends I'm much too proud to take you back again and be another face in the crowd" },
+      { number: 6, title: 'Bleach & Leather', duration: '3:15', hasDemoAudio: false, lyricsSnippet: 'Smell of cigarettes in a thrift store coat / Every word you never spoke still caught in your throat' },
+      { number: 7, title: 'The Last Bus to Nowhere', duration: '3:42', hasDemoAudio: false, lyricsSnippet: 'Empty seats on the upper deck / Rain tracing down the collar of my neck' },
+      { number: 8, title: 'Broken Neon Sign', duration: '2:56', hasDemoAudio: false, lyricsSnippet: 'Letters buzzing in the dark / Leave a scar and make a mark' },
+      { number: 9, title: 'Overdrive Heart', duration: '2:38', hasDemoAudio: false, lyricsSnippet: 'Amp on ten and the needle in the red / Rather be bleeding than living half dead' },
+      { number: 10, title: 'Concrete Garden', duration: '4:12', hasDemoAudio: false, lyricsSnippet: 'Weeds pushing through the cracks in the street / The city hum underneath our feet' }
     ],
     credits: {
       recorded: 'Old Chapel Studios, Leeds (Engineered by Dexter Vance & Tom Miller)',
@@ -193,10 +193,10 @@ export const DISCOGRAPHY: Release[] = [
     description: 'The raw, photocopied debut EP that launched the band onto BBC Introducing and underground punk circuits. Recorded in a single weekend in a damp Leeds rehearsal basement for under £300, it captures pure, unvarnished DIY adrenaline.',
     tracks: [
       { number: 1, title: 'Living Nightmare', duration: '2:58', hasDemoAudio: true, audioTrackId: 'living-nightmare', lyricsSnippet: "I'm wide awake but you're a nightmare / Egocentric, narcissistic, and you won't go away" },
-      { number: 2, title: 'Firefly (Burn the Wire)', duration: '4:33', hasDemoAudio: true, audioTrackId: 'firefly', lyricsSnippet: "Mystified by this dark night, gotta rely on nocturnal sight as I ride a firefly" },
-      { number: 3, title: 'Telephone Wire Blues', duration: '2:52', hasDemoAudio: false, lyricsSnippet: 'Cut the cable at the corner pole / Let the silence swallow us whole' },
-      { number: 4, title: 'Spit & Sawdust', duration: '2:24', hasDemoAudio: false, lyricsSnippet: 'Stumble down the stairs into the cellar door / Pints spilling on the sticky dancefloor' },
-      { number: 5, title: 'Dead Letters (4-Track Acoustic Take)', duration: '3:10', hasDemoAudio: false, lyricsSnippet: 'Original unmastered rehearsal recording with vocal bleed' }
+      { number: 2, title: 'So Sweet (Runaway)', duration: '4:20', hasDemoAudio: true, audioTrackId: 'so-sweet', lyricsSnippet: "I can't keep up with the games that you play / But I'm in love with the chase and the taste is so sweet" },
+      { number: 3, title: 'Firefly (Burn the Wire)', duration: '4:33', hasDemoAudio: true, audioTrackId: 'firefly', lyricsSnippet: "Mystified by this dark night, gotta rely on nocturnal sight as I ride a firefly" },
+      { number: 4, title: 'Telephone Wire Blues', duration: '2:52', hasDemoAudio: false, lyricsSnippet: 'Cut the cable at the corner pole / Let the silence swallow us whole' },
+      { number: 5, title: 'Spit & Sawdust', duration: '2:24', hasDemoAudio: false, lyricsSnippet: 'Stumble down the stairs into the cellar door / Pints spilling on the sticky dancefloor' }
     ],
     credits: {
       recorded: 'Basement Room 4, Kirkstall Road, Leeds',

@@ -1,6 +1,6 @@
 // Real Audio Player & Sound Engine for AFTERHOURS
-// High-energy female-fronted pop-punk and alternative rock tracks
-// Maya Lin lead vocals with distorted Telecaster & Les Paul guitars, punchy bass, and live drums
+// High-energy female-fronted heavy pop-punk and alternative rock tracks
+// Searing guitars, overdriven punk bass, and relentless live drumming
 // Connected to Web Audio AnalyserNode for real-time visualizer waveform rendering
 
 export interface SongSection {
@@ -27,6 +27,182 @@ export interface Track {
 
 export const TRACKS: Track[] = [
   {
+    id: 'living-nightmare',
+    title: 'Living Nightmare',
+    album: 'Disconnected Wire (2024 EP)',
+    duration: 178, // 2:58
+    bpm: 168,
+    key: 'E minor',
+    year: '2024',
+    audioSrc: 'audio/living-nightmare.mp3',
+    vocalist: 'Maya Lin',
+    lyricsSnippet: 'I’m wide awake but you’re a nightmare / Egocentric, narcissistic, and you won’t go away',
+    fullLyrics: [
+      "I’m wide awake but you’re a nightmare",
+      "I can’t escape, I’m seeing you everywhere",
+      "Words that you say poison the air",
+      "I’m wide awake but you’re my nightmare",
+      "",
+      "[HOOK]",
+      "Egocentric!",
+      "Narcissistic!",
+      "And you won’t go away!",
+      "",
+      "You're trumpeting hate and you don’t play fair",
+      "With your arrogant ways and your comb-over hair",
+      "Know you’re a fake, not a billionaire",
+      "No, no, I’m wide awake and you’re a nightmare!",
+      "",
+      "[HOOK]",
+      "Egocentric!",
+      "Narcissistic!",
+      "And you won’t go away!",
+      "",
+      "Blame is your game, power your aim",
+      "No stranger to shame, 'cuz they made you change your name!",
+      "Won’t take the bait in your golden snare",
+      "You’re known to take more than the lion’s share",
+      "Keeping my faith, not your lies and despair",
+      "Oh, I’m wide, wide awake and you’re a living nightmare!",
+      "",
+      "[OUTRO BREAKDOWN]",
+      "Egocentric! Narcissistic!",
+      "Sadly a certified cynic! (Geocentric)",
+      "Who’s choked on a big dose of bitterness! (Fatalistic)",
+      "Your bigotry is making the whole world sick! (Ethnocentric)",
+      "‘Cuz you’re oh, so sadistic!",
+      "And you won’t go away!",
+      "But I won’t play, won’t be your prey!",
+      "Go away! Won’t be your slave! Go away!"
+    ],
+    sections: [
+      { label: 'INTRO', time: 0 },
+      { label: 'VERSE 1', time: 14 },
+      { label: 'HOOK', time: 35 },
+      { label: 'VERSE 2', time: 52 },
+      { label: 'SOLO', time: 88 },
+      { label: 'CHORUS', time: 112 },
+      { label: 'OUTRO', time: 142 }
+    ],
+    credits: 'Recorded live to 2-inch tape in Leeds. Full driving 168-BPM Paramore-style pop-punk energy with screaming guitar riffs.',
+    description: 'Fast, aggressive pop-punk with driving power chords, tight snare rolls, and furious vocal delivery.'
+  },
+  {
+    id: 'so-sweet',
+    title: 'So Sweet (Runaway)',
+    album: 'Disconnected Wire (2024 EP)',
+    duration: 260, // 4:20
+    bpm: 224,
+    key: 'A major',
+    year: '2024',
+    audioSrc: 'audio/so-sweet.mp3',
+    vocalist: 'Maya Lin',
+    lyricsSnippet: 'I can\'t keep up with the games that you play / But I\'m in love with the chase and the taste is so sweet',
+    fullLyrics: [
+      "I can't keep up with the games that you play",
+      "You love me at night and hate me during the day",
+      "I'm not one to beg or bow at your feet",
+      "But I'm in love with the chase and the taste is so sweet",
+      "",
+      "[CHORUS]",
+      "I love you, I hate you, you're all that I want!",
+      "I love you, I hate you, you're all that I want!",
+      "I love you, I hate you, you're all that I want!",
+      "I love you, I hate you, you're all that I want!",
+      "",
+      "I can't keep track of the times I ask why",
+      "You're stirrin' up trouble when we could survive",
+      "I know you've got issues 'cause you tell me yourself",
+      "But I can't point a finger 'cause we both need some help",
+      "",
+      "[CHORUS]",
+      "I love you, I hate you, you're all that I want!",
+      "I love you, I hate you, you're all that I want!",
+      "I love you, I hate you, you're all that I want!",
+      "I love you, I hate you, you're all that I want!",
+      "",
+      "[BRIDGE]",
+      "This is a tragedy, you and I",
+      "We've got our hearts in a terrible bind",
+      "I let you so deep inside my mind",
+      "I don't think I can ever say goodbye...",
+      "",
+      "[FINAL CHORUS & OUTRO]",
+      "I love you, I hate you, you're all that I want!",
+      "I love you, I hate you, you're all that I want!",
+      "Taste is so sweet!"
+    ],
+    sections: [
+      { label: 'FAST INTRO', time: 0 },
+      { label: 'VERSE 1', time: 24 },
+      { label: 'CHORUS', time: 48 },
+      { label: 'VERSE 2', time: 82 },
+      { label: 'CHORUS', time: 106 },
+      { label: 'BRIDGE', time: 140 },
+      { label: 'FINAL CHORUS', time: 175 },
+      { label: 'PUNK OUTRO', time: 215 }
+    ],
+    credits: '224-BPM breakneck pop-punk track with full distorted Ibanez power chords, double-time drums, and soaring vocals.',
+    description: 'Blistering heavy pop-punk anthem featuring ferocious tempo shifts, double-kick drums, and melodic teenage angst hooks.'
+  },
+  {
+    id: 'eye-of-a-hurricane',
+    title: 'Eye of a Hurricane',
+    album: 'Static Dreams at 3AM (2025 LP)',
+    duration: 249, // 4:09
+    bpm: 142,
+    key: 'B minor',
+    year: '2025',
+    audioSrc: 'audio/eye-of-a-hurricane.mp3',
+    vocalist: 'Maya Lin',
+    lyricsSnippet: 'Storm clouds are rising in my chest / Standing right here in the eye of a hurricane',
+    fullLyrics: [
+      "Storm clouds are rising in my chest",
+      "We’re all on the edge of a raging tempest",
+      "The light shining now fading into nothingness",
+      "But I’m fighting back with my inner stillness",
+      "",
+      "[CHORUS]",
+      "In the eye of a hurricane!",
+      "I’m standing here in the eye of a hurricane!",
+      "",
+      "There’s a foreboding, pending darkness",
+      "The sun is absorbed by the horizon to the west",
+      "The sky is so heavy but there’s a light I still possess",
+      "For that I must evolve, I won’t settle for anything less!",
+      "",
+      "[CHORUS]",
+      "In the eye of a hurricane!",
+      "I’m standing here right in the eye!",
+      "",
+      "[BRIDGE]",
+      "Night is now surrounding, surrounding me",
+      "This crushing wave it is drowning, drowning me",
+      "Dark night of the soul surrounding, surrounding me",
+      "But I am still at peace!",
+      "I’m right in the eye!",
+      "",
+      "[OUTRO]",
+      "In the eye of a hurricane!",
+      "I’m standing right here!",
+      "In the eye of a hurricane!",
+      "I’ll face my fear!",
+      "Look me in the eye!",
+      "Standing right here!"
+    ],
+    sections: [
+      { label: 'HEAVY INTRO', time: 0 },
+      { label: 'VERSE 1', time: 20 },
+      { label: 'CHORUS', time: 52 },
+      { label: 'VERSE 2', time: 88 },
+      { label: 'CHORUS', time: 118 },
+      { label: 'SOLO / BRIDGE', time: 150 },
+      { label: 'OUTRO ROAR', time: 195 }
+    ],
+    credits: '142-BPM heavy crunchy alt-rock track recorded with dual vintage half-stacks and thundering live bass.',
+    description: 'Heavy, head-banging alternative rock anthem with crushing guitar distortion and powerhouse vocal dynamics.'
+  },
+  {
     id: 'after-hours',
     title: 'After Hours',
     album: 'Static Dreams at 3AM (2025 LP)',
@@ -35,7 +211,7 @@ export const TRACKS: Track[] = [
     key: 'A minor',
     year: '2025',
     audioSrc: 'audio/after-hours.mp3',
-    vocalist: 'Maya Lin (Female Lead Vocals)',
+    vocalist: 'Maya Lin',
     lyricsSnippet: "I said I wouldn't be back here again, but here I am again / Team no sleep, after hours athlete",
     fullLyrics: [
       "I said I wouldn't be back here again",
@@ -78,69 +254,8 @@ export const TRACKS: Track[] = [
       { label: 'CHORUS', time: 165 },
       { label: 'OUTRO', time: 198 }
     ],
-    credits: 'Vocals: Maya Lin. Guitars: Kieran Cruz. Bass: Dexter Vance. Drums: Samira Patel. Mastered at Abbey Road Studios.',
-    description: 'The anthemic title track combining energetic pop-punk rhythms with Maya Lin’s soaring vocals and blistering electric guitar hooks.'
-  },
-  {
-    id: 'living-nightmare',
-    title: 'Living Nightmare',
-    album: 'Disconnected Wire (2024 EP)',
-    duration: 178, // 2:58
-    bpm: 168,
-    key: 'E minor',
-    year: '2024',
-    audioSrc: 'audio/living-nightmare.mp3',
-    vocalist: 'Maya Lin (Female Lead Vocals)',
-    lyricsSnippet: 'I’m wide awake but you’re a nightmare / Egocentric, narcissistic, and you won’t go away',
-    fullLyrics: [
-      "I’m wide awake but you’re a nightmare",
-      "I can’t escape, I’m seeing you everywhere",
-      "Words that you say poison the air",
-      "I’m wide awake but you’re my nightmare",
-      "",
-      "[REFRAIN]",
-      "Egocentric!",
-      "Narcissistic!",
-      "And you won’t go away!",
-      "",
-      "You're trumpeting hate and you don’t play fair",
-      "With your arrogant ways and your comb-over hair",
-      "Know you’re a fake, not a billionaire",
-      "No, no, I’m wide awake and you’re a nightmare!",
-      "",
-      "[REFRAIN]",
-      "Egocentric!",
-      "Narcissistic!",
-      "And you won’t go away!",
-      "",
-      "Blame is your game, power your aim",
-      "No stranger to shame, 'cuz they made you change your name!",
-      "Won’t take the bait in your golden snare",
-      "You’re known to take more than the lion’s share",
-      "Keeping my faith, not your lies and despair",
-      "Oh, I’m wide, wide awake and you’re a living nightmare!",
-      "",
-      "[OUTRO BREAKDOWN]",
-      "Egocentric! Narcissistic!",
-      "Sadly a certified cynic! (Geocentric)",
-      "Who’s choked on a big dose of bitterness! (Fatalistic)",
-      "Your bigotry is making the whole world sick! (Ethnocentric)",
-      "‘Cuz you’re oh, so sadistic!",
-      "And you won’t go away!",
-      "But I won’t play, won’t be your prey!",
-      "Go away! Won’t be your slave! Go away!"
-    ],
-    sections: [
-      { label: 'INTRO', time: 0 },
-      { label: 'VERSE 1', time: 14 },
-      { label: 'HOOK', time: 35 },
-      { label: 'VERSE 2', time: 52 },
-      { label: 'SOLO', time: 88 },
-      { label: 'CHORUS', time: 112 },
-      { label: 'OUTRO', time: 142 }
-    ],
-    credits: 'Written by Lin / Cruz. Recorded live to 2-inch tape in Leeds. Full driving 168-BPM Paramore-style pop-punk energy.',
-    description: 'Fast, aggressive pop-punk with driving power chords, tight snare rolls, and furious vocal delivery.'
+    credits: 'Guitars: Armo & Kieran Cruz. Bass: Dexter Vance. Drums: Samira Patel. Mastered at Abbey Road Studios.',
+    description: 'The anthemic title track combining energetic pop-punk rhythms with soaring vocals and blistering electric guitar hooks.'
   },
   {
     id: 'the-paradox',
@@ -151,7 +266,7 @@ export const TRACKS: Track[] = [
     key: 'D minor',
     year: '2025',
     audioSrc: 'audio/the-paradox.mp3',
-    vocalist: 'Maya Lin (Female Lead Vocals)',
+    vocalist: 'Maya Lin',
     lyricsSnippet: 'You are resilient like a distant star / You are brilliant glowing in the growing dark, even with a broken heart',
     fullLyrics: [
       "Swirling, overwhelmed",
@@ -200,6 +315,120 @@ export const TRACKS: Track[] = [
     description: 'Cathartic alternative rock anthem with crushing guitar crescendos and empowering melodic vocal hooks.'
   },
   {
+    id: 'the-hook',
+    title: 'The Hook',
+    album: 'Static Dreams at 3AM (2025 LP)',
+    duration: 290, // 4:50
+    bpm: 122,
+    key: 'D minor',
+    year: '2025',
+    audioSrc: 'audio/the-hook.mp3',
+    vocalist: 'Maya Lin',
+    lyricsSnippet: 'How did we ever get so far? / How did you ever put your hook into my heart?',
+    fullLyrics: [
+      "What made you change your mind",
+      "About moving on",
+      "As if we'd never met before?",
+      "What made you change your mind like that?",
+      "Was it something that I said?",
+      "No, I've been too afraid to speak",
+      "",
+      "Did she call you on the phone today?",
+      "Did she tell you you're alone today",
+      "Like I should have done",
+      "Before you hurt me so?",
+      "",
+      "[CHORUS]",
+      "How did we ever get so far?",
+      "How did you ever put your hook into my heart?",
+      "How did we ever get so far?",
+      "How did you ever put your hook into my heart?",
+      "",
+      "[BRIDGE]",
+      "I used to think that your perfection was unattainable",
+      "But it turns out you're just a fake!",
+      "So is everything else!",
+      "There's nothing for me to believe in anymore!",
+      "Nothing left since you're gone!",
+      "Nothing's right, nothing lasts, nothing's good!",
+      "",
+      "[FINAL CHORUS & OUTRO]",
+      "How did we ever get so far?",
+      "How did you ever put your hook into my heart?",
+      "I avoid the hook and I live another day!",
+      "Live to see the new morning sun!"
+    ],
+    sections: [
+      { label: 'INTRO', time: 0 },
+      { label: 'VERSE 1', time: 25 },
+      { label: 'CHORUS', time: 60 },
+      { label: 'VERSE 2', time: 110 },
+      { label: 'CHORUS', time: 145 },
+      { label: 'SOLO / BRIDGE', time: 180 },
+      { label: 'OUTRO', time: 240 }
+    ],
+    credits: 'Guitars turned up to eleven. Heavy hard rock arrangement with saturated valve overdrive.',
+    description: 'Gritty, hard-rocking anthem exploring heartbreak and betrayal with thunderous guitars and passionate vocal delivery.'
+  },
+  {
+    id: 'firefly',
+    title: 'Firefly (Burn the Wire)',
+    album: 'Disconnected Wire (2024 EP)',
+    duration: 273, // 4:33
+    bpm: 126,
+    key: 'F# minor',
+    year: '2024',
+    audioSrc: 'audio/firefly.mp3',
+    vocalist: 'Maya Lin',
+    lyricsSnippet: 'Mystified by this dark night, gotta rely on nocturnal sight as I ride a firefly',
+    fullLyrics: [
+      "We are so easily pacified",
+      "Entertained, paralyzed by homicide",
+      "Violence now on both sides, somehow justified",
+      "They draw the lines, but I cannot be stratified",
+      "",
+      "[CHORUS]",
+      "Mystified by this dark night",
+      "Gotta rely on nocturnal sight",
+      "Baby, I'm mystified by this dark night",
+      "As I ride a firefly!",
+      "",
+      "Disparity intensified",
+      "Amoral men banking on a great divide",
+      "Impending earth change, it's still, it's still denied",
+      "They lie, but I will not be satisfied!",
+      "",
+      "[CHORUS]",
+      "Mystified by this dark night",
+      "Gotta rely on nocturnal sight",
+      "Baby, I'm mystified by this dark night",
+      "As I ride a firefly!",
+      "",
+      "[BRIDGE]",
+      "I'm astride a firefly",
+      "Upon her back I watch us fall, I cry",
+      "She and I, we shine a tiny speck of light",
+      "With darkness we collide, we fight",
+      "To push to find the other side!",
+      "",
+      "[OUTRO]",
+      "This is our time!",
+      "This is our time!",
+      "We fight to find the other side!"
+    ],
+    sections: [
+      { label: 'INTRO', time: 0 },
+      { label: 'VERSE 1', time: 18 },
+      { label: 'CHORUS', time: 45 },
+      { label: 'VERSE 2', time: 76 },
+      { label: 'CHORUS', time: 104 },
+      { label: 'BRIDGE', time: 138 },
+      { label: 'OUTRO JAM', time: 180 }
+    ],
+    credits: 'Recorded in Basement Studio Room 4. Live drums and gritty overdriven bass guitar.',
+    description: 'Relentless riot-grrrl post-punk track with thundering bass groove and searing lead vocals.'
+  },
+  {
     id: 'face-in-the-crowd',
     title: 'Face in the Crowd',
     album: 'Static Dreams at 3AM (2025 LP)',
@@ -208,7 +437,7 @@ export const TRACKS: Track[] = [
     key: 'G major',
     year: '2025',
     audioSrc: 'audio/face-in-the-crowd.mp3',
-    vocalist: 'Maya Lin (Female Lead Vocals)',
+    vocalist: 'Maya Lin',
     lyricsSnippet: 'Playing strong when you\'re around, tell my friends I\'m much too proud to take you back again',
     fullLyrics: [
       "Seen you down there lately...",
@@ -258,64 +487,6 @@ export const TRACKS: Track[] = [
     ],
     credits: '132-BPM driving pop-punk ballad with punchy rhythm section and emotive lead vocals.',
     description: 'Bittersweet and dynamic pop-punk anthem exploring modern teenage angst, pride, and unresolved heartbreak.'
-  },
-  {
-    id: 'firefly',
-    title: 'Firefly (Burn the Wire)',
-    album: 'Disconnected Wire (2024 EP)',
-    duration: 273, // 4:33
-    bpm: 126,
-    key: 'F# minor',
-    year: '2024',
-    audioSrc: 'audio/firefly.mp3',
-    vocalist: 'Maya Lin (Female Lead Vocals)',
-    lyricsSnippet: 'Mystified by this dark night, gotta rely on nocturnal sight as I ride a firefly',
-    fullLyrics: [
-      "We are so easily pacified",
-      "Entertained, paralyzed by homicide",
-      "Violence now on both sides, somehow justified",
-      "They draw the lines, but I cannot be stratified",
-      "",
-      "[CHORUS]",
-      "Mystified by this dark night",
-      "Gotta rely on nocturnal sight",
-      "Baby, I'm mystified by this dark night",
-      "As I ride a firefly!",
-      "",
-      "Disparity intensified",
-      "Amoral men banking on a great divide",
-      "Impending earth change, it's still, it's still denied",
-      "They lie, but I will not be satisfied!",
-      "",
-      "[CHORUS]",
-      "Mystified by this dark night",
-      "Gotta rely on nocturnal sight",
-      "Baby, I'm mystified by this dark night",
-      "As I ride a firefly!",
-      "",
-      "[BRIDGE]",
-      "I'm astride a firefly",
-      "Upon her back I watch us fall, I cry",
-      "She and I, we shine a tiny speck of light",
-      "With darkness we collide, we fight",
-      "To push to find the other side!",
-      "",
-      "[OUTRO]",
-      "This is our time!",
-      "This is our time!",
-      "We fight to find the other side!"
-    ],
-    sections: [
-      { label: 'INTRO', time: 0 },
-      { label: 'VERSE 1', time: 18 },
-      { label: 'CHORUS', time: 45 },
-      { label: 'VERSE 2', time: 76 },
-      { label: 'CHORUS', time: 104 },
-      { label: 'BRIDGE', time: 138 },
-      { label: 'OUTRO JAM', time: 180 }
-    ],
-    credits: 'Recorded in Basement Studio Room 4. Live drums and gritty overdriven bass guitar.',
-    description: 'Relentless riot-grrrl post-punk track with thundering bass groove and searing female lead vocals.'
   }
 ];
 
@@ -355,7 +526,6 @@ class RockAudioEngine {
       this.audio.volume = this.volume;
       this.audio.src = this.currentTrack.audioSrc;
 
-      // Event listeners on HTMLAudioElement
       this.audio.addEventListener('timeupdate', () => {
         if (this.audio) {
           this.playbackTime = this.audio.currentTime;
@@ -419,13 +589,11 @@ class RockAudioEngine {
       this.analyser.fftSize = 64;
       this.analyser.smoothingTimeConstant = 0.8;
 
-      // Connect HTML5 audio through Web Audio Analyser
       try {
         this.sourceNode = this.ctx.createMediaElementSource(this.audio);
         this.sourceNode.connect(this.analyser);
         this.analyser.connect(this.ctx.destination);
       } catch (nodeErr) {
-        // Continue gracefully if browser already connected
         console.warn('Web Audio source connection note:', nodeErr);
       }
     } catch (e) {
