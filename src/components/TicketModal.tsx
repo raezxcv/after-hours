@@ -206,3 +206,4 @@ export const TicketModal: React.FC<TicketModalProps> = ({ gig, onClose }) => {
     </div>
   );
 };
+

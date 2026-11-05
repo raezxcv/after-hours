@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { BAND_MEMBERS, Member } from '../data/bandData';
 import { Wrench, Music, Quote, MapPin } from 'lucide-react';
+import { handleImageError } from '../utils/imageHelper';
 
 interface BandPageProps {
   onNavigate: (page: string) => void;
@@ -38,8 +39,9 @@ export const BandPage: React.FC<BandPageProps> = ({ onNavigate }) => {
         <div className="relative border-2 border-punk-border bg-punk-black tape-top-left tape-top-right shadow-2xl overflow-hidden mb-16">
           <div className="aspect-[16/9] w-full bg-punk-black overflow-hidden relative">
             <img
-              src="/images/band-hero.jpg"
+              src="images/band-hero.jpg"
               alt="AFTERHOURS four members in concrete backstage hallway"
+              onError={handleImageError}
               className="w-full h-full object-cover filter contrast-105"
             />
             <div className="absolute bottom-4 left-4 right-4 bg-punk-black/90 border border-punk-border p-4 font-mono text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-2">
@@ -127,6 +129,7 @@ export const BandPage: React.FC<BandPageProps> = ({ onNavigate }) => {
                   <img
                     src={selectedMember.image}
                     alt={`${selectedMember.name} portrait`}
+                    onError={handleImageError}
                     className="w-full h-full object-cover"
                   />
                 </div>
@@ -235,8 +238,9 @@ export const BandPage: React.FC<BandPageProps> = ({ onNavigate }) => {
           <div className="lg:col-span-6">
             <div className="border-2 border-punk-border shadow-2xl bg-punk-black overflow-hidden relative">
               <img
-                src="/images/rehearsal-room.jpg"
+                src="images/rehearsal-room.jpg"
                 alt="AFTERHOURS rehearsal in basement studio with cables and amplifiers"
+                onError={handleImageError}
                 className="w-full aspect-[16/10] object-cover"
               />
               <div className="p-3 bg-punk-black border-t border-punk-border font-mono text-xs text-faded-light flex justify-between items-center">

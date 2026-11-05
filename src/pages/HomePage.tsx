@@ -2,6 +2,7 @@ import React from 'react';
 import { Play, Calendar, ArrowRight, MapPin } from 'lucide-react';
 import { DISCOGRAPHY, TOUR_DATES, GALLERY_ITEMS, GalleryItem } from '../data/bandData';
 import { audioEngine, TRACKS } from '../utils/audioEngine';
+import { handleImageError } from '../utils/imageHelper';
 
 interface HomePageProps {
   onNavigate: (page: string) => void;
@@ -65,8 +66,9 @@ export const HomePage: React.FC<HomePageProps> = ({
           <div className="relative group overflow-hidden bg-punk-zinc">
             <div className="aspect-[16/9] w-full bg-punk-black overflow-hidden relative">
               <img
-                src="/images/band-hero.jpg"
+                src="images/band-hero.jpg"
                 alt="AFTERHOURS band members Maya Lin, Kieran Cruz, Dexter Vance, and Samira Patel backstage"
+                onError={handleImageError}
                 className="w-full h-full object-cover object-center filter contrast-110 brightness-95"
               />
 
@@ -109,6 +111,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                 <img
                   src={latestRelease.coverImage}
                   alt="Album Cover for Static Dreams at 3AM"
+                  onError={handleImageError}
                   className="w-full aspect-square object-cover"
                 />
                 <div className="p-4 bg-punk-black flex justify-between items-center text-base">
@@ -260,6 +263,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                 <img
                   src={item.imageUrl}
                   alt={item.title}
+                  onError={handleImageError}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                 />
               </div>

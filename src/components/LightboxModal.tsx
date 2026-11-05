@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { X, ChevronLeft, ChevronRight, Camera, Calendar, MapPin } from 'lucide-react';
 import { GalleryItem } from '../data/bandData';
+import { handleImageError } from '../utils/imageHelper';
 
 interface LightboxModalProps {
   item: GalleryItem | null;
@@ -83,6 +84,7 @@ export const LightboxModal: React.FC<LightboxModalProps> = ({
           <img
             src={item.imageUrl}
             alt={item.title}
+            onError={handleImageError}
             className="max-h-[70vh] w-auto max-w-full object-contain border border-punk-border"
           />
           <div className="absolute top-4 left-4 bg-crimson text-white font-mono text-[10px] uppercase font-bold px-2 py-0.5">
@@ -127,3 +129,4 @@ export const LightboxModal: React.FC<LightboxModalProps> = ({
     </div>
   );
 };
+

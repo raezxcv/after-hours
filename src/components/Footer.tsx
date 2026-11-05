@@ -121,11 +121,13 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
           </div>
         </div>
 
-        {/* Studio Close Statement */}
-        <div className="pt-8 pb-12 text-center">
-          <p className="text-xl tracking-widest text-dirty-white/50 font-bold uppercase">
-            AFTERHOURS &bull; LEEDS &bull; INDEPENDENT ROCK RECORDINGS
-          </p>
+        {/* Studio Close: Giant Prominent AFTERHOURS Watermark */}
+        <div className="pt-10 pb-16 overflow-hidden select-none border-t border-punk-border/60">
+          <div
+            className="font-display text-7xl sm:text-9xl md:text-[11rem] lg:text-[13rem] xl:text-[15rem] tracking-tighter text-dirty-white/35 hover:text-crimson/50 transition-colors duration-300 select-none leading-none w-full text-center block"
+          >
+            AFTERHOURS
+          </div>
         </div>
 
         {/* Bottom Bar: Copyright & Back to Top */}

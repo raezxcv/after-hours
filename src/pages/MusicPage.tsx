@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { DISCOGRAPHY, Release } from '../data/bandData';
 import { audioEngine, TRACKS, Track } from '../utils/audioEngine';
 import { Play, Pause, Radio, AlertCircle, Sliders } from 'lucide-react';
+import { handleImageError } from '../utils/imageHelper';
 
 export const MusicPage: React.FC = () => {
   const [selectedRelease, setSelectedRelease] = useState<Release>(DISCOGRAPHY[0]);
@@ -102,6 +103,7 @@ export const MusicPage: React.FC = () => {
                 <img
                   src={selectedRelease.coverImage}
                   alt={`${selectedRelease.title} Cover Artwork`}
+                  onError={handleImageError}
                   className="w-full aspect-square object-cover"
                 />
                 <div className="p-3 bg-punk-black border-t border-punk-border flex justify-between items-center font-mono text-xs">

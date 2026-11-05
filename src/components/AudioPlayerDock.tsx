@@ -48,7 +48,7 @@ export const AudioPlayerDock: React.FC = () => {
 
       for (let i = 0; i < 24; i++) {
         const val = playerState.isPlaying
-          ? (dataArray[i] > 10 ? dataArray[i] / 255 : (Math.sin(Date.now() / 80 + i) * 0.4 + 0.5) * 0.7)
+          ? (dataArray[i] > 10 ? dataArray[i] / 255 : (Math.sin(Date.now() / 90 + i) * 0.4 + 0.5) * 0.8)
           : 0.05;
 
         const barHeight = Math.max(3, val * canvas.height);
@@ -74,6 +74,7 @@ export const AudioPlayerDock: React.FC = () => {
   }, [playerState.isPlaying]);
 
   const formatTime = (secs: number) => {
+    if (isNaN(secs) || secs < 0) return '0:00';
     const m = Math.floor(secs / 60);
     const s = Math.floor(secs % 60);
     return `${m}:${s < 10 ? '0' : ''}${s}`;
@@ -91,7 +92,7 @@ export const AudioPlayerDock: React.FC = () => {
 
   const toggleMute = () => {
     if (isMuted) {
-      audioEngine.setVolume(0.8);
+      audioEngine.setVolume(0.85);
       setIsMuted(false);
     } else {
       audioEngine.setVolume(0);
@@ -105,105 +106,116 @@ export const AudioPlayerDock: React.FC = () => {
   };
 
   const currentTrack = playerState.currentTrack;
+  const currentDuration = playerState.duration || currentTrack.duration;
 
   return (
     <>
-      {/* Bottom Compact Sticky Player */}
+      {/* Bottom Sticky Player Bar */}
       <aside
         data-dock="true"
         aria-label="AFTERHOURS Demo Audio Player"
-        className="fixed bottom-0 left-0 right-0 z-30 bg-punk-black border-t-2 border-crimson"
+        className="fixed bottom-0 left-0 right-0 z-40 bg-punk-black border-t-2 border-crimson shadow-2xl"
       >
-        {/* Main Player Bar */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-2 flex items-center justify-between gap-3">
-          {/* Left: Track Information & Quick Play */}
-          <div className="flex items-center gap-3 min-w-0 flex-1 md:flex-initial md:w-1/3">
-            <button
-              onClick={() => audioEngine.prevTrack()}
-              className="p-1 text-dirty-white hover:text-white hidden sm:block"
-              title="Previous Track"
-              aria-label="Previous Track"
-            >
-              <SkipBack className="w-4 h-4" />
-            </button>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-2.5 flex flex-col md:flex-row items-center justify-between gap-3">
+          {/* Left: Track Information & Core Controls */}
+          <div className="flex items-center gap-3 w-full md:w-auto min-w-0 justify-between md:justify-start">
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => audioEngine.prevTrack()}
+                className="p-1.5 text-dirty-white hover:text-crimson bg-punk-zinc transition-colors"
+                title="Previous Track"
+                aria-label="Previous Track"
+              >
+                <SkipBack className="w-4 h-4" />
+              </button>
 
-            <button
-              onClick={handlePlayToggle}
-              className="w-10 h-10 bg-crimson hover:bg-crimson-glow text-white flex-shrink-0 flex items-center justify-center border border-white"
-              aria-label={playerState.isPlaying ? 'Pause audio demo' : 'Play audio demo'}
-            >
-              {playerState.isPlaying ? (
-                <Pause className="w-5 h-5 fill-current" />
-              ) : (
-                <Play className="w-5 h-5 fill-current translate-x-0.5" />
-              )}
-            </button>
+              <button
+                onClick={handlePlayToggle}
+                className="w-10 h-10 bg-crimson hover:bg-crimson-glow text-white flex-shrink-0 flex items-center justify-center border-2 border-white transition-transform active:scale-95"
+                title={playerState.isPlaying ? 'Pause' : 'Play Rock Song with Vocals'}
+                aria-label={playerState.isPlaying ? 'Pause audio track' : 'Play audio track'}
+              >
+                {playerState.isPlaying ? (
+                  <Pause className="w-5 h-5 fill-current" />
+                ) : (
+                  <Play className="w-5 h-5 fill-current translate-x-0.5" />
+                )}
+              </button>
 
-            <button
-              onClick={() => audioEngine.nextTrack()}
-              className="p-1 text-dirty-white hover:text-white hidden sm:block"
-              title="Next Track"
-              aria-label="Next Track"
-            >
-              <SkipForward className="w-4 h-4" />
-            </button>
+              <button
+                onClick={() => audioEngine.nextTrack()}
+                className="p-1.5 text-dirty-white hover:text-crimson bg-punk-zinc transition-colors"
+                title="Next Track"
+                aria-label="Next Track"
+              >
+                <SkipForward className="w-4 h-4" />
+              </button>
+            </div>
 
-            <div className="min-w-0">
+            <div className="min-w-0 pr-2">
               <div className="flex items-center gap-2">
                 <h4 className="font-display text-lg sm:text-xl text-dirty-white truncate tracking-wide leading-tight">
                   {currentTrack.title}
                 </h4>
-                <span className="text-sm text-crimson font-bold hidden sm:inline-block">
+                <span className="text-xs text-crimson font-bold hidden sm:inline-block">
                   {currentTrack.bpm} BPM
                 </span>
               </div>
-              <p className="text-sm text-faded-light truncate">
-                {currentTrack.album}
+              <p className="text-xs text-faded-light truncate">
+                {currentTrack.album} &bull; {playerState.isPlaying ? 'VOCALS ACTIVE' : 'READY'}
               </p>
             </div>
+
+            {/* Mobile Quick Lyrics */}
+            <button
+              onClick={() => setShowLyricsModal(true)}
+              className="p-2 text-dirty-white bg-punk-zinc hover:text-crimson md:hidden flex-shrink-0"
+              title="View Lyrics Sheet"
+              aria-label="View Lyrics"
+            >
+              <FileText className="w-4 h-4 text-crimson" />
+            </button>
           </div>
 
-          {/* Center: Desktop Scrubber Controls */}
-          <div className="hidden md:flex flex-col items-center gap-1 w-5/12">
-            <div className="w-full flex items-center gap-3">
-              <span className="text-sm text-faded-light w-10 text-right">
-                {formatTime(playerState.playbackTime)}
-              </span>
+          {/* Center: Interactive Scrubber Progress Bar */}
+          <div className="w-full md:flex-1 max-w-xl flex items-center gap-3">
+            <span className="text-xs text-dirty-white w-12 text-right font-bold tabular-nums">
+              {formatTime(playerState.playbackTime)}
+            </span>
 
-              <div className="relative flex-1 flex items-center">
-                <input
-                  type="range"
-                  min="0"
-                  max={currentTrack.duration}
-                  step="0.5"
-                  value={playerState.playbackTime}
-                  onChange={handleSeek}
-                  aria-label="Track Progress Bar"
-                  className="w-full h-1.5 bg-punk-zinc appearance-none cursor-pointer accent-crimson rounded-none"
-                />
-              </div>
-
-              <span className="text-sm text-faded-light w-10 text-left">
-                {formatTime(currentTrack.duration)}
-              </span>
+            <div className="relative flex-1 flex items-center">
+              <input
+                type="range"
+                min="0"
+                max={currentDuration > 0 ? currentDuration : 100}
+                step="0.5"
+                value={playerState.playbackTime || 0}
+                onChange={handleSeek}
+                aria-label="Track Progress Bar"
+                className="w-full h-2 bg-punk-zinc appearance-none cursor-pointer accent-crimson rounded-none"
+              />
             </div>
+
+            <span className="text-xs text-dirty-white w-12 text-left font-bold tabular-nums">
+              {formatTime(currentDuration)}
+            </span>
           </div>
 
-          {/* Right: Actions, Volume & Expand */}
-          <div className="flex items-center gap-3 flex-shrink-0">
-            {/* Real-time Web Audio Visualizer */}
-            <div className="hidden sm:flex flex-col items-center">
+          {/* Right: Visualizer, Volume & Drawer Trigger */}
+          <div className="hidden sm:flex items-center gap-3 flex-shrink-0">
+            {/* Visualizer Canvas */}
+            <div className="flex flex-col items-center">
               <canvas
                 ref={canvasRef}
                 width={80}
                 height={20}
                 className="bg-punk-zinc"
-                title="Real-time Web Audio Frequency Monitor"
+                title="Real-time Web Audio Waveform Analyzer"
               />
             </div>
 
             {/* Volume Control */}
-            <div className="hidden lg:flex items-center gap-1.5">
+            <div className="flex items-center gap-1.5">
               <button
                 onClick={toggleMute}
                 className="text-faded-light hover:text-dirty-white"
@@ -260,14 +272,14 @@ export const AudioPlayerDock: React.FC = () => {
                   <button
                     key={t.id}
                     onClick={() => audioEngine.selectTrack(t)}
-                    className={`w-full text-left p-2 text-xs flex items-center justify-between ${
+                    className={`w-full text-left p-2.5 text-sm flex items-center justify-between transition-colors ${
                       t.id === currentTrack.id
                         ? 'bg-crimson text-white font-bold'
                         : 'bg-punk-black text-dirty-white hover:bg-punk-card'
                     }`}
                   >
                     <span className="truncate">{t.title}</span>
-                    <span className="text-xs text-faded-light ml-2">{formatTime(t.duration)}</span>
+                    <span className="text-xs text-dirty-white ml-2">{formatTime(t.duration)}</span>
                   </button>
                 ))}
               </div>
@@ -280,8 +292,8 @@ export const AudioPlayerDock: React.FC = () => {
               <p className="text-xs text-faded-light leading-relaxed mb-2">
                 {currentTrack.description}
               </p>
-              <div className="p-2 bg-punk-black text-xs text-faded-light">
-                <p className="text-dirty-white font-bold">MASTER CREDITS:</p>
+              <div className="p-2.5 bg-punk-black text-xs text-faded-light">
+                <p className="text-dirty-white font-bold">RECORDING CREDITS:</p>
                 <p>{currentTrack.credits}</p>
               </div>
             </div>
@@ -293,7 +305,7 @@ export const AudioPlayerDock: React.FC = () => {
                 </h5>
                 <button
                   onClick={() => setShowLyricsModal(true)}
-                  className="text-xs text-crimson hover:underline"
+                  className="text-xs text-crimson hover:underline font-bold"
                 >
                   FULL SHEET &rarr;
                 </button>

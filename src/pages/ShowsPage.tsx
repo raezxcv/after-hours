@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { TOUR_DATES } from '../data/bandData';
 import { MapPin, Ticket, AlertCircle, ShieldAlert, Filter } from 'lucide-react';
+import { handleImageError } from '../utils/imageHelper';
 
 interface ShowsPageProps {
   onOpenTicketModal: (gigId: string) => void;
@@ -174,8 +175,9 @@ export const ShowsPage: React.FC<ShowsPageProps> = ({ onOpenTicketModal }) => {
             <div className="border-4 border-dirty-white bg-paper-cream p-3 text-punk-black shadow-harsh relative transform -rotate-1 hover:rotate-0 transition-transform duration-300">
               <div className="aspect-[3/4] overflow-hidden border-2 border-punk-black bg-black">
                 <img
-                  src="/images/tour-poster.jpg"
+                  src="images/tour-poster.jpg"
                   alt="Official Screenprinted Tour Poster for AFTERHOURS UK & Europe Tour"
+                  onError={handleImageError}
                   className="w-full h-full object-cover"
                 />
               </div>

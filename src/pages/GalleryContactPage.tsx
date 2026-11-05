@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { GALLERY_ITEMS, MERCH_ITEMS, GalleryItem } from '../data/bandData';
 import { Camera, ShoppingBag, Send, CheckCircle2, AlertCircle, Filter } from 'lucide-react';
+import { handleImageError } from '../utils/imageHelper';
 
 interface GalleryContactPageProps {
   onOpenLightbox: (item: GalleryItem) => void;
@@ -113,6 +114,7 @@ export const GalleryContactPage: React.FC<GalleryContactPageProps> = ({ onOpenLi
                 <img
                   src={item.imageUrl}
                   alt={item.title}
+                  onError={handleImageError}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 filter contrast-105"
                 />
                 <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
