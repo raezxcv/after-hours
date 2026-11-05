@@ -780,35 +780,35 @@ class RockAudioEngine {
   public play(track?: Track): void {
     const audio = this.initAudio();
 
-    // If switching to a different track
+    // If switching to a different track, update state immediately so UI reflects the change
     if (track && track.id !== this.currentTrack.id) {
       this.currentTrack = track;
       this.playbackTime = 0;
       this.duration = track.duration;
       this.bufferedTime = 0;
+      this.isPlaying = false; // Will flip to true once play() resolves
       audio.src = resolveAudioUrl(track.audioSrc);
       audio.currentTime = 0;
       audio.load();
+      this.notify(); // Notify immediately so UI shows new track info
     }
+
+    // Mark playing optimistically so UI responds instantly on click
+    this.isPlaying = true;
+    this.notify();
 
     // Call audio.play() synchronously inside the user activation frame
     const playPromise = audio.play();
     if (playPromise !== undefined) {
       playPromise
-        .then(() => {
-          this.isPlaying = true;
-          this.notify();
-        })
         .catch((err) => {
           if (err?.name !== 'AbortError') {
             console.warn('Audio playback note:', err);
+            this.isPlaying = audio.paused ? false : true;
+            this.notify();
           }
-          this.isPlaying = !audio.paused;
-          this.notify();
+          // AbortError = track switch mid-play; ignore, next play() will correct state
         });
-    } else {
-      this.isPlaying = true;
-      this.notify();
     }
   }
 

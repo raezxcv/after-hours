@@ -25,15 +25,18 @@ export const AudioPlayerDock: React.FC = () => {
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const scrubberContainerRef = useRef<HTMLDivElement | null>(null);
+  const isPlayingRef = useRef<boolean>(false);
 
   useEffect(() => {
     const unsubscribe = audioEngine.subscribe(() => {
-      setPlayerState({ ...audioEngine.getState() });
+      const state = audioEngine.getState();
+      isPlayingRef.current = state.isPlaying;
+      setPlayerState({ ...state });
     });
     return () => unsubscribe();
   }, []);
 
-  // Web Audio Visualizer Canvas Loop
+  // Web Audio Visualizer Canvas Loop — uses ref to avoid stale closure
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -54,7 +57,7 @@ export const AudioPlayerDock: React.FC = () => {
 
       for (let i = 0; i < 16; i++) {
         const val = dataArray[i];
-        const barHeight = playerState.isPlaying
+        const barHeight = isPlayingRef.current
           ? Math.max(3, (val / 255) * canvas.height)
           : Math.sin(Date.now() / 400 + i * 0.5) * 2 + 3;
 
@@ -74,7 +77,7 @@ export const AudioPlayerDock: React.FC = () => {
     return () => {
       cancelAnimationFrame(animationFrameId);
     };
-  }, [playerState.isPlaying]);
+  }, []); // Run once — reads live state via isPlayingRef
 
   const formatTime = (secs: number) => {
     if (isNaN(secs) || secs < 0) return '0:00';
