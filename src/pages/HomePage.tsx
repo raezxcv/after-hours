@@ -27,8 +27,10 @@ export const HomePage: React.FC<HomePageProps> = ({
     return () => unsub();
   }, []);
 
+  const leadSingleTrack = TRACKS.find((t) => t.id === 'so-sweet') || TRACKS[0];
+
   const handlePlayLeadSingle = () => {
-    audioEngine.togglePlay(TRACKS[0]);
+    audioEngine.togglePlay(leadSingleTrack);
   };
 
   return (
@@ -56,8 +58,9 @@ export const HomePage: React.FC<HomePageProps> = ({
               <button
                 onClick={handlePlayLeadSingle}
                 className="btn-punk flex items-center justify-center gap-2"
+                title="Play Lead Single: So Sweet (Runaway)"
               >
-                {audioState.isPlaying && audioState.currentTrack.id === TRACKS[0].id ? (
+                {audioState.isPlaying && audioState.currentTrack.id === leadSingleTrack.id ? (
                   <>
                     <Pause className="w-5 h-5 fill-current" />
                     PAUSE LEAD SINGLE
