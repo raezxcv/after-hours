@@ -21,6 +21,7 @@ export const AudioPlayerDock: React.FC = () => {
   const [showLyricsModal, setShowLyricsModal] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
   const [showRemainingTime, setShowRemainingTime] = useState(false);
+  const [dragTime, setDragTime] = useState<number | null>(null);
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const scrubberContainerRef = useRef<HTMLDivElement | null>(null);
@@ -102,15 +103,22 @@ export const AudioPlayerDock: React.FC = () => {
     }
   };
 
-  const handleSeek = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSeekChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = parseFloat(e.target.value);
+    setDragTime(null);
     audioEngine.seek(val);
   };
 
+  const handleSeekInput = (e: React.FormEvent<HTMLInputElement>) => {
+    const val = parseFloat((e.target as HTMLInputElement).value);
+    setDragTime(val);
+  };
+
+  const displayTime = dragTime !== null ? dragTime : playerState.playbackTime;
   const currentTrack = playerState.currentTrack;
   const currentDuration = playerState.duration || currentTrack.duration;
   const progressPercent = currentDuration > 0
-    ? Math.min(100, (playerState.playbackTime / currentDuration) * 100)
+    ? Math.min(100, (displayTime / currentDuration) * 100)
     : 0;
   const bufferedPercent = currentDuration > 0
     ? Math.min(100, (playerState.bufferedTime / currentDuration) * 100)
@@ -188,7 +196,7 @@ export const AudioPlayerDock: React.FC = () => {
             {/* Center: Simple Clean Progress Bar */}
             <div className="w-full md:flex-1 max-w-xl flex items-center gap-3">
               <span className="font-mono text-xs text-dirty-white w-10 text-right font-medium tabular-nums select-none">
-                {formatTime(playerState.playbackTime)}
+                {formatTime(displayTime)}
               </span>
 
               {/* Scrubber Rail */}
@@ -223,8 +231,11 @@ export const AudioPlayerDock: React.FC = () => {
                   min="0"
                   max={currentDuration > 0 ? currentDuration : 100}
                   step="0.1"
-                  value={playerState.playbackTime || 0}
-                  onChange={handleSeek}
+                  value={displayTime || 0}
+                  onInput={handleSeekInput}
+                  onChange={handleSeekChange}
+                  onMouseUp={() => setDragTime(null)}
+                  onTouchEnd={() => setDragTime(null)}
                   aria-label="Track Progress Scrubber"
                   className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
                 />
@@ -238,7 +249,7 @@ export const AudioPlayerDock: React.FC = () => {
                 aria-label="Toggle duration format"
               >
                 {showRemainingTime
-                  ? `-${formatTime(Math.max(0, currentDuration - playerState.playbackTime))}`
+                  ? `-${formatTime(Math.max(0, currentDuration - displayTime))}`
                   : formatTime(currentDuration)}
               </button>
             </div>

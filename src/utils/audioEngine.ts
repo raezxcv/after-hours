@@ -1,4 +1,4 @@
-// Real Audio Player & Sound Engine for AFTERHOURS
+    // Real Audio Player & Sound Engine for AFTERHOURS
 // High-energy female-fronted heavy pop-punk and alternative rock tracks
 // Searing guitars, overdriven punk bass, and relentless live drumming
 // Connected to Web Audio AnalyserNode for real-time visualizer waveform rendering
@@ -708,7 +708,6 @@ class RockAudioEngine {
   private volume: number = 0.85;
   private listeners: Set<() => void> = new Set();
   private isAudioInitialized: boolean = false;
-  private pendingPlayPromise: Promise<void> | null = null;
 
   constructor() {
     // Audio element is initialized on demand upon user interaction
@@ -778,7 +777,7 @@ class RockAudioEngine {
     }
   }
 
-  public async play(track?: Track): Promise<void> {
+  public play(track?: Track): void {
     const audio = this.initAudio();
 
     // If switching to a different track
@@ -787,66 +786,54 @@ class RockAudioEngine {
       this.playbackTime = 0;
       this.duration = track.duration;
       this.bufferedTime = 0;
-
-      // Wait for any pending play to settle before reassigning source
-      if (this.pendingPlayPromise) {
-        try {
-          await this.pendingPlayPromise;
-        } catch {
-          // Ignore aborted promises
-        }
-      }
-
-      audio.pause();
       audio.src = resolveAudioUrl(track.audioSrc);
       audio.currentTime = 0;
       audio.load();
     }
 
-    try {
-      this.pendingPlayPromise = audio.play();
-      await this.pendingPlayPromise;
+    // Call audio.play() synchronously inside the user activation frame
+    const playPromise = audio.play();
+    if (playPromise !== undefined) {
+      playPromise
+        .then(() => {
+          this.isPlaying = true;
+          this.notify();
+        })
+        .catch((err) => {
+          if (err?.name !== 'AbortError') {
+            console.warn('Audio playback note:', err);
+          }
+          this.isPlaying = !audio.paused;
+          this.notify();
+        });
+    } else {
       this.isPlaying = true;
       this.notify();
-    } catch (err: any) {
-      if (err?.name !== 'AbortError') {
-        console.warn('Audio playback note:', err);
-      }
-      this.isPlaying = !audio.paused;
-      this.notify();
-    } finally {
-      this.pendingPlayPromise = null;
     }
   }
 
-  public async pause(): Promise<void> {
-    if (!this.audio) return;
-    if (this.pendingPlayPromise) {
-      try {
-        await this.pendingPlayPromise;
-      } catch {
-        // Ignore aborted promises
-      }
+  public pause(): void {
+    if (this.audio) {
+      this.audio.pause();
     }
-    this.audio.pause();
     this.isPlaying = false;
     this.notify();
   }
 
-  public async togglePlay(track?: Track): Promise<void> {
+  public togglePlay(track?: Track): void {
     const audio = this.initAudio();
 
     // If a different track is clicked, switch and play it
     if (track && track.id !== this.currentTrack.id) {
-      await this.play(track);
+      this.play(track);
       return;
     }
 
     // Toggle current track
     if (this.isPlaying || (!audio.paused && audio.currentTime > 0)) {
-      await this.pause();
+      this.pause();
     } else {
-      await this.play();
+      this.play();
     }
   }
 
@@ -855,11 +842,23 @@ class RockAudioEngine {
     const targetDuration = this.duration || this.currentTrack.duration;
     const clamped = Math.max(0, Math.min(seconds, targetDuration));
     this.playbackTime = clamped;
-    try {
-      audio.currentTime = clamped;
-    } catch (e) {
-      console.warn('Seek error:', e);
+
+    if (audio.readyState >= 1) {
+      try {
+        audio.currentTime = clamped;
+      } catch (e) {
+        console.warn('Seek error:', e);
+      }
+    } else {
+      const onLoaded = () => {
+        try {
+          audio.currentTime = clamped;
+        } catch {}
+        audio.removeEventListener('loadedmetadata', onLoaded);
+      };
+      audio.addEventListener('loadedmetadata', onLoaded);
     }
+
     this.notify();
   }
 
@@ -870,20 +869,20 @@ class RockAudioEngine {
     this.notify();
   }
 
-  public async nextTrack(): Promise<void> {
+  public nextTrack(): void {
     const currentIndex = TRACKS.findIndex((t) => t.id === this.currentTrack.id);
     const nextIndex = (currentIndex + 1) % TRACKS.length;
-    await this.play(TRACKS[nextIndex]);
+    this.play(TRACKS[nextIndex]);
   }
 
-  public async prevTrack(): Promise<void> {
+  public prevTrack(): void {
     const currentIndex = TRACKS.findIndex((t) => t.id === this.currentTrack.id);
     const prevIndex = (currentIndex - 1 + TRACKS.length) % TRACKS.length;
-    await this.play(TRACKS[prevIndex]);
+    this.play(TRACKS[prevIndex]);
   }
 
-  public async selectTrack(track: Track): Promise<void> {
-    await this.play(track);
+  public selectTrack(track: Track): void {
+    this.play(track);
   }
 
   public getState(): AudioEngineState {
