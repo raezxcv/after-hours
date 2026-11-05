@@ -323,7 +323,7 @@ export const MusicPage: React.FC = () => {
                         {activeLyricsTrack.title}
                       </h3>
                       <p className="font-mono text-xs text-punk-black/70">
-                        Tempo: {activeLyricsTrack.bpm} BPM &bull; Key: {activeLyricsTrack.key} &bull; Vocals: Maya Lin (Female Lead)
+                        Tempo: {activeLyricsTrack.bpm} BPM &bull; Key: {activeLyricsTrack.key} &bull; 4-Track Demo
                       </p>
                     </div>
 
