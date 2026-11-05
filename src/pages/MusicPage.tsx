@@ -323,18 +323,64 @@ export const MusicPage: React.FC = () => {
                         {activeLyricsTrack.title}
                       </h3>
                       <p className="font-mono text-xs text-punk-black/70">
-                        Tempo: {activeLyricsTrack.bpm} BPM &bull; Key: {activeLyricsTrack.key} &bull; Scribed by Maya Lin
+                        Tempo: {activeLyricsTrack.bpm} BPM &bull; Key: {activeLyricsTrack.key} &bull; Vocals: Maya Lin (Female Lead)
                       </p>
                     </div>
 
                     <button
-                      onClick={() => audioEngine.play(activeLyricsTrack)}
-                      className="btn-punk text-xs py-1.5 px-3"
+                      onClick={() => audioEngine.togglePlay(activeLyricsTrack)}
+                      className="btn-punk text-xs py-1.5 px-3 flex items-center gap-1.5"
                     >
-                      {audioState.isPlaying && audioState.currentTrack.id === activeLyricsTrack.id
-                        ? 'PAUSE'
-                        : 'PLAY DEMO'}
+                      {audioState.isPlaying && audioState.currentTrack.id === activeLyricsTrack.id ? (
+                        <>
+                          <Pause className="w-3.5 h-3.5 fill-current" />
+                          <span>PAUSE</span>
+                        </>
+                      ) : (
+                        <>
+                          <Play className="w-3.5 h-3.5 fill-current" />
+                          <span>PLAY DEMO</span>
+                        </>
+                      )}
                     </button>
+                  </div>
+
+                  {/* Synchronized Rehearsal Tape Scrubber */}
+                  <div className="bg-punk-black text-dirty-white p-3 mb-4 border border-punk-black font-mono text-xs">
+                    <div className="flex justify-between items-center mb-1 text-[11px]">
+                      <span className="text-crimson font-bold uppercase flex items-center gap-1">
+                        <Radio className={`w-3 h-3 ${audioState.isPlaying && audioState.currentTrack.id === activeLyricsTrack.id ? 'animate-pulse text-crimson' : 'text-zinc-500'}`} />
+                        {audioState.isPlaying && audioState.currentTrack.id === activeLyricsTrack.id ? 'TAPE ACTIVE' : 'TAPE READY'}
+                      </span>
+                      <span className="text-dirty-white/90">
+                        {audioState.currentTrack.id === activeLyricsTrack.id
+                          ? `${Math.floor(audioState.playbackTime / 60)}:${Math.floor(audioState.playbackTime % 60) < 10 ? '0' : ''}${Math.floor(audioState.playbackTime % 60)} / ${Math.floor(activeLyricsTrack.duration / 60)}:${activeLyricsTrack.duration % 60 < 10 ? '0' : ''}${activeLyricsTrack.duration % 60}`
+                          : `0:00 / ${Math.floor(activeLyricsTrack.duration / 60)}:${activeLyricsTrack.duration % 60 < 10 ? '0' : ''}${activeLyricsTrack.duration % 60}`}
+                      </span>
+                    </div>
+                    <div
+                      onClick={(e) => {
+                        const rect = e.currentTarget.getBoundingClientRect();
+                        const pct = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+                        if (audioState.currentTrack.id !== activeLyricsTrack.id) {
+                          audioEngine.play(activeLyricsTrack);
+                        }
+                        audioEngine.seek(pct * activeLyricsTrack.duration);
+                      }}
+                      className="relative w-full h-3 bg-zinc-900 border border-zinc-700 cursor-pointer overflow-hidden shadow-inner"
+                      title="Click anywhere to scrub playback"
+                    >
+                      <div
+                        style={{
+                          width: `${
+                            audioState.currentTrack.id === activeLyricsTrack.id
+                              ? Math.min(100, (audioState.playbackTime / activeLyricsTrack.duration) * 100)
+                              : 0
+                          }%`
+                        }}
+                        className="h-full bg-crimson transition-all duration-75 shadow-[0_0_8px_rgba(225,29,72,0.8)]"
+                      />
+                    </div>
                   </div>
 
                   {/* Lyrics text */}

@@ -1,5 +1,5 @@
-import React from 'react';
-import { Play, Calendar, ArrowRight, MapPin } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Play, Pause, Calendar, ArrowRight, MapPin } from 'lucide-react';
 import { DISCOGRAPHY, TOUR_DATES, GALLERY_ITEMS, GalleryItem } from '../data/bandData';
 import { audioEngine, TRACKS } from '../utils/audioEngine';
 import { handleImageError } from '../utils/imageHelper';
@@ -18,9 +18,17 @@ export const HomePage: React.FC<HomePageProps> = ({
   const latestRelease = DISCOGRAPHY[0];
   const featuredGig = TOUR_DATES[0];
   const previewGallery = GALLERY_ITEMS.slice(0, 4);
+  const [audioState, setAudioState] = useState(audioEngine.getState());
+
+  useEffect(() => {
+    const unsub = audioEngine.subscribe(() => {
+      setAudioState({ ...audioEngine.getState() });
+    });
+    return () => unsub();
+  }, []);
 
   const handlePlayLeadSingle = () => {
-    audioEngine.play(TRACKS[0]);
+    audioEngine.togglePlay(TRACKS[0]);
   };
 
   return (
@@ -49,8 +57,17 @@ export const HomePage: React.FC<HomePageProps> = ({
                 onClick={handlePlayLeadSingle}
                 className="btn-punk flex items-center justify-center gap-2"
               >
-                <Play className="w-5 h-5 fill-current" />
-                PLAY LEAD SINGLE (DEMO)
+                {audioState.isPlaying && audioState.currentTrack.id === TRACKS[0].id ? (
+                  <>
+                    <Pause className="w-5 h-5 fill-current" />
+                    PAUSE LEAD SINGLE
+                  </>
+                ) : (
+                  <>
+                    <Play className="w-5 h-5 fill-current" />
+                    PLAY LEAD SINGLE (DEMO)
+                  </>
+                )}
               </button>
               <button
                 onClick={() => onNavigate('shows')}
@@ -132,38 +149,58 @@ export const HomePage: React.FC<HomePageProps> = ({
                 <span className="text-base uppercase font-bold text-white block mb-2">
                   SELECTED TRACK SAMPLER (CLICK TO PLAY DEMO):
                 </span>
-                {latestRelease.tracks.slice(0, 4).map((trk) => (
-                  <div
-                    key={trk.number}
-                    className="flex items-center justify-between p-4 bg-punk-black hover:bg-punk-card transition-colors group"
-                  >
-                    <div className="min-w-0 pr-4">
-                      <h4 className="font-display text-xl text-dirty-white group-hover:text-crimson transition-colors">
-                        {trk.title}
-                      </h4>
-                      <p className="text-base text-dirty-white/80 italic truncate max-w-xs sm:max-w-md">
-                        &ldquo;{trk.lyricsSnippet}&rdquo;
-                      </p>
-                    </div>
+                {latestRelease.tracks.slice(0, 4).map((trk) => {
+                  const isTrackActive = audioState.isPlaying && audioState.currentTrack.id === trk.audioTrackId;
+                  return (
+                    <div
+                      key={trk.number}
+                      className={`flex items-center justify-between p-4 transition-colors group border ${
+                        isTrackActive ? 'bg-crimson/20 border-crimson' : 'bg-punk-black border-punk-border hover:bg-punk-card'
+                      }`}
+                    >
+                      <div className="min-w-0 pr-4">
+                        <div className="flex items-center gap-2">
+                          <h4 className="font-display text-xl text-dirty-white group-hover:text-crimson transition-colors">
+                            {trk.title}
+                          </h4>
+                          {isTrackActive && (
+                            <span className="text-[10px] font-mono font-bold bg-crimson text-white px-1.5 py-0.5 tracking-wider animate-pulse">
+                              PLAYING
+                            </span>
+                          )}
+                        </div>
+                        <p className="text-sm text-dirty-white/80 italic truncate max-w-xs sm:max-w-md">
+                          &ldquo;{trk.lyricsSnippet}&rdquo;
+                        </p>
+                      </div>
 
-                    <div className="flex items-center gap-3 flex-shrink-0">
-                      <span className="text-base text-dirty-white">{trk.duration}</span>
-                      {trk.hasDemoAudio && (
-                        <button
-                          onClick={() => {
-                            const trackObj = TRACKS.find((t) => t.id === trk.audioTrackId);
-                            if (trackObj) audioEngine.play(trackObj);
-                          }}
-                          className="p-2.5 bg-crimson hover:bg-crimson-glow text-white"
-                          title={`Play ${trk.title}`}
-                          aria-label={`Play ${trk.title}`}
-                        >
-                          <Play className="w-5 h-5 fill-current" />
-                        </button>
-                      )}
+                      <div className="flex items-center gap-3 flex-shrink-0">
+                        <span className="text-base text-dirty-white">{trk.duration}</span>
+                        {trk.hasDemoAudio && (
+                          <button
+                            onClick={() => {
+                              const trackObj = TRACKS.find((t) => t.id === trk.audioTrackId);
+                              if (trackObj) audioEngine.togglePlay(trackObj);
+                            }}
+                            className={`p-2.5 text-white transition-all ${
+                              isTrackActive
+                                ? 'bg-crimson border-2 border-white scale-105 shadow-[0_0_10px_rgba(225,29,72,0.8)]'
+                                : 'bg-crimson hover:bg-crimson-glow'
+                            }`}
+                            title={isTrackActive ? `Pause ${trk.title}` : `Play ${trk.title}`}
+                            aria-label={isTrackActive ? `Pause ${trk.title}` : `Play ${trk.title}`}
+                          >
+                            {isTrackActive ? (
+                              <Pause className="w-5 h-5 fill-current" />
+                            ) : (
+                              <Play className="w-5 h-5 fill-current" />
+                            )}
+                          </button>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
 
               {/* Action Buttons */}

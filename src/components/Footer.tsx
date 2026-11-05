@@ -20,14 +20,14 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
   };
 
   return (
-    <footer className="bg-punk-black-pure pt-16 pb-96 text-dirty-white relative z-10">
+    <footer className="bg-punk-black-pure pt-16 pb-48 text-dirty-white relative z-10">
       <div className="max-w-7xl mx-auto px-8 sm:px-10">
         {/* Top Grid: Newsletter + Band Lore */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-10 pb-16">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-10 pb-12">
           {/* Dispatch Newsletter */}
-          <div className="md:col-span-6 space-y-4 my-8 relative z-10">
-            <span className="text-sm uppercase font-bold tracking-widest text-crimson flex items-center gap-2">
-              <Radio className="w-4 h-4 text-crimson" /> THE 3AM DISPATCH
+          <div className="md:col-span-6 space-y-4 my-4 relative z-10">
+            <span className="text-sm uppercase font-bold text-crimson flex items-center gap-2">
+              <Radio className="w-4 h-4 text-crimson" /> The 3am Dispatch
             </span>
             <p className="text-lg sm:text-xl text-dirty-white tracking-tight font-bold uppercase">
               JOIN THE UNDERGROUND TAPE CIRCLE
@@ -122,16 +122,16 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
         </div>
 
         {/* Studio Close: Giant Prominent AFTERHOURS Watermark */}
-        <div className="pt-10 pb-16 overflow-hidden select-none border-t border-punk-border/60">
+        <div className="pt-12 pb-16 overflow-hidden select-none">
           <div
-            className="font-display text-7xl sm:text-9xl md:text-[11rem] lg:text-[13rem] xl:text-[15rem] tracking-tighter text-dirty-white/35 hover:text-crimson/50 transition-colors duration-300 select-none leading-none w-full text-center block"
+            className="font-display text-7xl sm:text-9xl md:text-[11rem] lg:text-[13rem] xl:text-[15rem] tracking-tight text-dirty-white/35 hover:text-crimson/50 transition-colors duration-300 select-none leading-none w-full text-center block"
           >
             AFTERHOURS
           </div>
         </div>
 
         {/* Bottom Bar: Copyright & Back to Top */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-6 text-sm text-faded-light">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-6 pb-24 text-sm text-faded-light">
           <div className="flex items-center gap-2">
             <Disc3 className="w-4 h-4 text-crimson" />
             <span>&copy; 2025 AFTERHOURS BAND. INDEPENDENT RECORDINGS.</span>

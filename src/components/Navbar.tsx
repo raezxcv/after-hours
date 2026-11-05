@@ -34,13 +34,12 @@ export const Navbar: React.FC<NavbarProps> = ({
     <header className="sticky top-0 z-40 bg-punk-black/95">
       {/* Top Urgent Tour Marquee Ribbon */}
       <div className="bg-crimson text-white text-sm py-1.5 px-4 overflow-hidden select-none">
-        <div className="animate-marquee whitespace-nowrap flex gap-8 items-center font-bold tracking-widest">
-          <span>NEW LP &quot;STATIC DREAMS AT 3AM&quot; OUT NOW ON 180G VINYL &amp; CASSETTE</span>
-          <span>&bull; AUTUMN UK &amp; EU TOUR: LEEDS &amp; LONDON SOLD OUT</span>
-          <span>&bull; MANCHESTER &amp; GLASGOW LOW TICKETS</span>
-          <span>&bull; PLAYING RAW LIVE DEMO DIRECT FROM BASF 4-TRACK TAPE</span>
-          <span>NO BACKING TRACKS &bull; REAL SWEAT &bull; THREE CHORDS &amp; THE TRUTH</span>
-          <span>&bull; AUTUMN UK &amp; EU TOUR: LEEDS &amp; LONDON SOLD OUT</span>
+        <div className="animate-marquee whitespace-nowrap flex gap-8 items-center font-bold">
+          <span>New LP &ldquo;Static Dreams at 3AM&rdquo; out now on 180g vinyl and cassette</span>
+          <span>&bull; Autumn UK &amp; EU Tour: Leeds &amp; London Sold Out</span>
+          <span>&bull; Manchester &amp; Glasgow low tickets remaining</span>
+          <span>&bull; 5 Pop-punk demos featuring Maya Lin on lead vocals</span>
+          <span>No backing tracks &bull; Three chords &amp; the truth</span>
         </div>
       </div>
 

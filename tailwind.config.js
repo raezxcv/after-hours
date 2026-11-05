@@ -24,8 +24,8 @@ export default {
       },
       fontFamily: {
         display: ['"Anton"', 'sans-serif'],
-        mono: ['"Space Mono"', 'monospace'],
-        body: ['"Space Mono"', 'monospace'],
+        mono: ['system-ui', '-apple-system', 'sans-serif'],
+        body: ['system-ui', '-apple-system', 'sans-serif'],
       },
     },
   },
