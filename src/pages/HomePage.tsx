@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Play, Pause, Calendar, ArrowRight, MapPin } from 'lucide-react';
 import { DISCOGRAPHY, TOUR_DATES, GALLERY_ITEMS, GalleryItem } from '../data/bandData';
 import { audioEngine, TRACKS } from '../utils/audioEngine';
@@ -19,10 +19,13 @@ export const HomePage: React.FC<HomePageProps> = ({
   const featuredGig = TOUR_DATES[0];
   const previewGallery = GALLERY_ITEMS.slice(0, 4);
   const [audioState, setAudioState] = useState(audioEngine.getState());
+  const audioStateRef = useRef(audioState);
 
   useEffect(() => {
     const unsub = audioEngine.subscribe(() => {
-      setAudioState({ ...audioEngine.getState() });
+      const s = audioEngine.getState();
+      audioStateRef.current = s;
+      setAudioState({ ...s });
     });
     return () => unsub();
   }, []);
@@ -30,7 +33,13 @@ export const HomePage: React.FC<HomePageProps> = ({
   const leadSingleTrack = TRACKS.find((t) => t.id === 'so-sweet') || TRACKS[0];
 
   const handlePlayLeadSingle = () => {
-    audioEngine.togglePlay(leadSingleTrack);
+    // Use live ref to avoid stale closure on rapid clicks
+    const live = audioStateRef.current;
+    if (live.isPlaying && live.currentTrack.id === leadSingleTrack.id) {
+      audioEngine.pause();
+    } else {
+      audioEngine.play(leadSingleTrack);
+    }
   };
 
   return (
@@ -183,7 +192,15 @@ export const HomePage: React.FC<HomePageProps> = ({
                           <button
                             onClick={() => {
                               const trackObj = TRACKS.find((t) => t.id === trk.audioTrackId);
-                              if (trackObj) audioEngine.togglePlay(trackObj);
+                              if (trackObj) {
+                                // Read live state via ref to avoid stale closure
+                                const live = audioStateRef.current;
+                                if (live.isPlaying && live.currentTrack.id === trackObj.id) {
+                                  audioEngine.pause();
+                                } else {
+                                  audioEngine.play(trackObj);
+                                }
+                              }
                             }}
                             className={`p-2.5 text-white transition-all ${
                               isTrackActive

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { DISCOGRAPHY, Release } from '../data/bandData';
 import { audioEngine, TRACKS, Track } from '../utils/audioEngine';
 import { Play, Pause, Radio, AlertCircle, Sliders } from 'lucide-react';
@@ -8,11 +8,14 @@ export const MusicPage: React.FC = () => {
   const [selectedRelease, setSelectedRelease] = useState<Release>(DISCOGRAPHY[0]);
   const [activeLyricsTrack, setActiveLyricsTrack] = useState<Track | null>(TRACKS[0]);
   const [audioState, setAudioState] = useState(audioEngine.getState());
+  // Keep a live ref so click handlers always read current state (avoid stale closure)
+  const audioStateRef = useRef(audioState);
 
-  // Listen for audio engine state changes
-  React.useEffect(() => {
+  useEffect(() => {
     const unsub = audioEngine.subscribe(() => {
-      setAudioState({ ...audioEngine.getState() });
+      const s = audioEngine.getState();
+      audioStateRef.current = s;
+      setAudioState({ ...s });
     });
     return () => unsub();
   }, []);
@@ -20,13 +23,14 @@ export const MusicPage: React.FC = () => {
   const handlePlayTrack = (trackId?: string) => {
     if (!trackId) return;
     const foundTrack = TRACKS.find((t) => t.id === trackId);
-    if (foundTrack) {
-      if (audioState.isPlaying && audioState.currentTrack.id === trackId) {
-        audioEngine.pause();
-      } else {
-        audioEngine.play(foundTrack);
-        setActiveLyricsTrack(foundTrack);
-      }
+    if (!foundTrack) return;
+    // Read live state via ref — never stale
+    const live = audioStateRef.current;
+    if (live.isPlaying && live.currentTrack.id === trackId) {
+      audioEngine.pause();
+    } else {
+      audioEngine.play(foundTrack);
+      setActiveLyricsTrack(foundTrack);
     }
   };
 
@@ -274,7 +278,13 @@ export const MusicPage: React.FC = () => {
                     key={t.id}
                     onClick={() => {
                       setActiveLyricsTrack(t);
-                      audioEngine.play(t);
+                      // Read live state to decide play vs pause
+                      const live = audioStateRef.current;
+                      if (live.isPlaying && live.currentTrack.id === t.id) {
+                        audioEngine.pause();
+                      } else {
+                        audioEngine.play(t);
+                      }
                     }}
                     className={`w-full text-left p-4 border-2 transition-all ${
                       isCurrent
